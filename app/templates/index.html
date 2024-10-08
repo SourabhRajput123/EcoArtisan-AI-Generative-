@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idea Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Idea Generator API!</h1>
+    <form id="ideaForm">
+        <label for="prompt">Enter your question:</label><br>
+        <input type="text" id="prompt" name="prompt" required><br><br>
+        <button type="submit">Generate Idea</button>
+    </form>
+    <h2>Generated Idea:</h2>
+    <p id="generatedIdea"></p>
+
+    <script>
+        document.getElementById('ideaForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const prompt = document.getElementById('prompt').value;
+
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: prompt }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('generatedIdea').textContent = data.idea;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
